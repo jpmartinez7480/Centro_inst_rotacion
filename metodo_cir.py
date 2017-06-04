@@ -115,26 +115,40 @@ def getDatos(datos,ex,eprima):
 	data = [pu,_Rv,_Ri_di_amount]
 	return data
 
-def metodoTanteo(tabla,ex,nx,ny,sx,sy):
+def metodoNumerico(tabla,ex,nx,ny,sx,sy):
 	eprima = ex
 	datos = getDatos(tabla,ex,eprima)
-	print datos
+	result = []
 	while datos[1] - datos[0] > 0.01:
 		eprima-= 0.02
 		tablaAux = crearTabla(eprima,nx,ny,sx,sy)
 		datos = getDatos(tablaAux,ex,eprima)
-		print eprima
-	return datos
+	result = [datos,tablaAux]
+	return result
 
-eprima = 12
-ex = 12
-a = crearTabla(eprima,2,9,3,3)
-mostrarTabla(a)
+def c_cir(ex,nx,ny,sx,sy):
+	tabla = crearTabla(ex,nx,ny,sx,sy)
+	datos = metodoNumerico(tabla,ex,nx,ny,sx,sy)
+	_tablaFinal = datos[1]
+	_pu = datos[0][0]
+	_Rv = datos[0][1]
+	_c = _pu/27 
+	mostrarTabla(_tablaFinal)
+	print "\nEl valor de Pu es: ", round(_pu,4)
+	print "El valor de Rv es: ", round(_Rv,4)
+	print "El valor de C es: ", round(_c,4)
+	return True
+
+#eprima = 12
+ex = 22
+#a = crearTabla(eprima,2,9,3,3)
+#mostrarTabla(a)
 #b = crearTabla(8.36,2,9,3,3)
 #mostrarTabla(b)
-datos = metodoTanteo(a,ex,2,9,3,3)
-c = datos[0]/27
-print c
+#datos = metodoTanteo(a,ex,2,9,3,3)
+#c = datos[0]/27
+#print c
+c_cir(ex,2,9,3,3)
 
 
 
