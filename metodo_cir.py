@@ -76,20 +76,20 @@ def crearTabla(ex,nx,ny,sx,sy):
 	_Rd = []
 	_dMax = 0
 	for e in x:
-		_h.append(round(h(ex,e,Xcg),3))
+		_h.append(round(h(ex,e,Xcg),5))
 	for e in y:
-		_v.append(round(v(e,Ycg),3))
+		_v.append(round(v(e,Ycg),5))
 	for e in range(0,len(_h),1):
-		_d.append(round(d(_h[e],_v[e]),3))
+		_d.append(round(d(_h[e],_v[e]),5))
 	_dMax = max(_d)
 	for di in _d:
-		_delta.append(round(delta(di,_dMax,d0),3))
+		_delta.append(round(delta(di,_dMax,d0),5))
 	for _delta_i in _delta:
-		_R.append(round(R(_delta_i,Rultima),3))
+		_R.append(round(R(_delta_i,Rultima),5))
 	for var in range(0,len(_h),1):
-		_Rv.append(round(Rv(_R[var],_h[var],_d[var]),3))
+		_Rv.append(round(Rv(_R[var],_h[var],_d[var]),5))
 	for var in range(0,len(_d),1):
-		_Rd.append(round(Rd(_R[var],_d[var]),3))
+		_Rd.append(round(Rd(_R[var],_d[var]),5))
 	tabla.append(_h) #0
 	tabla.append(_v) #1
 	tabla.append(_d) #2
@@ -118,13 +118,21 @@ def getDatos(datos,ex,eprima):
 def metodoNumerico(tabla,ex,nx,ny,sx,sy):
 	eprima = ex
 	datos = getDatos(tabla,ex,eprima)
+	print datos
 	result = []
-	while datos[1] - datos[0] > 0.01:
-		eprima-= 0.02
-		tablaAux = crearTabla(eprima,nx,ny,sx,sy)
-		datos = getDatos(tablaAux,ex,eprima)
-	result = [datos,tablaAux]
-	return result
+	if datos[0] > datos[1]:
+		while datos[0]/datos[1] > 1:
+			eprima+= 0.02
+			tablaAux = crearTabla(eprima,nx,ny,sx,sy)
+			datos = getDatos(tablaAux,ex,eprima)
+		result = [datos,tabla]
+	elif datos[1] > datos[0]: 
+		while datos[1]/datos[0] > 1:
+			eprima-= 0.02
+			tablaAux = crearTabla(eprima,nx,ny,sx,sy)
+			datos = getDatos(tablaAux,ex,eprima)
+		result = [datos,tablaAux]
+	return result	
 
 def c_cir(ex,nx,ny,sx,sy):
 	tabla = crearTabla(ex,nx,ny,sx,sy)
@@ -139,16 +147,13 @@ def c_cir(ex,nx,ny,sx,sy):
 	print "El valor de C es: ", round(_c,4)
 	return True
 
-#eprima = 12
-ex = 22
-#a = crearTabla(eprima,2,9,3,3)
-#mostrarTabla(a)
-#b = crearTabla(8.36,2,9,3,3)
-#mostrarTabla(b)
-#datos = metodoTanteo(a,ex,2,9,3,3)
-#c = datos[0]/27
-#print c
-c_cir(ex,2,9,3,3)
+
+ex = float(raw_input("Ingrese la excentricidad: "))
+nx = float(raw_input("Ingrese la cantidad de columnas de pernos: "))
+ny = float(raw_input("Ingrese la cantidad de filas de pernos: "))
+sx = float(raw_input("Ingrese la separacion de columnas: "))
+sy = float(raw_input("Ingrese la separacion de filas: "))
+c_cir(ex,nx,ny,sx,sy)
 
 
 
